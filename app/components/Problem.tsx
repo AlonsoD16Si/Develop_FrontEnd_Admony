@@ -80,11 +80,11 @@ export default function Problem() {
     <section
       id="problema"
       ref={sectionRef}
-      className="py-24 px-4 sm:px-6 lg:px-8 bg-white opacity-0"
+      className="py-24 px-4 sm:px-6 lg:px-8 bg-[#F7F9FA] opacity-0"
     >
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#000000] mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-[#1E1E1E] mb-4">
             El Problema que Detectamos
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -98,10 +98,10 @@ export default function Problem() {
           {problems.map((problem, index) => (
             <div
               key={index}
-              className="p-6 bg-[#F8F8F8] rounded-xl hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2"
+              className="p-6 bg-[#F7F9FA] rounded-xl hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2"
             >
-              <div className="text-4xl mb-4">{problem.icon}</div>
-              <h3 className="text-xl font-semibold text-[#000000] mb-3">
+              <div className="text-4xl mb-4 text-[#000000]">{problem.icon}</div>
+              <h3 className="text-xl font-semibold text-[#1E1E1E] mb-3">
                 {problem.title}
               </h3>
               <p className="text-gray-600 leading-relaxed">

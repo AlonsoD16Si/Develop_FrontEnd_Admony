@@ -1,12 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #F8F8F8;
-  --foreground: #000000;
-  --primary: #2B40B5;
-  --secondary: #007A60;
-  --accent: #008566;
-  --accent-dark: #00654D;
+  --background: #0A0E27;
+  --foreground: #FFFFFF;
+  --primary: #1A1F3A; /* Fondo oscuro secundario */
+  --secondary: #bff3d6; 
+  --accent: #F5C842; /* Dorado claro */
+  --accent-dark: #2A2F4A; /* Borde oscuro */
+  --success: #2FBF71; /* Verde para ingresos */
+  --danger: #EF4444; /* Rojo para gastos */
 }
 
 @theme inline {
@@ -25,6 +27,7 @@ body {
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+  
 }
 
 /* Animaciones de scroll */
@@ -49,14 +52,14 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: #F8F8F8;
+  background: #0A0E27;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2B40B5;
+  background: var(--secondary);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #1e2d8a;
+  background: var(--accent);
 }

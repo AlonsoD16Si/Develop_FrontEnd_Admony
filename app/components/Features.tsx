@@ -151,11 +151,11 @@ export default function Features() {
     <section
       id="caracteristicas"
       ref={sectionRef}
-      className="py-24 px-4 sm:px-6 lg:px-8 bg-white opacity-0"
+      className="py-24 px-4 sm:px-6 lg:px-8 bg-[#F7F9FA] opacity-0"
     >
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#000000] mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-[#1E1E1E] mb-4">
             Características Principales
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -168,14 +168,14 @@ export default function Features() {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group p-8 bg-[#F8F8F8] rounded-xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+              className="group p-8 bg-[#F7F9FA] rounded-xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
             >
               <div
-                className={`w-16 h-16 rounded-xl bg-gradient-to-br flex items-center justify-center text-3xl mb-6 transform group-hover:scale-110 transition-transform`}
+                className={`w-16 h-16 rounded-xl bg-gradient-to-br flex items-center justify-center text-3xl mb-6 transform group-hover:scale-110 transition-transform text-[#000000]`}
               >
                 {feature.icon}
               </div>
-              <h3 className="text-2xl font-semibold text-[#000000] mb-3">
+              <h3 className="text-2xl font-semibold text-[#1E1E1E] mb-3">
                 {feature.title}
               </h3>
               <p className="text-gray-600 leading-relaxed">

@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#000000] text-white py-12 px-4 sm:px-6 lg:px-8">
+    <footer className="bg-[#0A3A63] text-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
@@ -14,13 +14,13 @@ export default function Footer() {
         className="h-12 md:h-16 w-auto"
         priority
       />
-            <p className="text-gray-400">
+            <p className="text-[#D7DDE3]">
               Administración inteligente de finanzas personales.
             </p>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Producto</h4>
-            <ul className="space-y-2 text-gray-400">
+            <ul className="space-y-2 text-[#D7DDE3]">
               <li>
                 <a href="#caracteristicas" className="hover:text-white transition-colors">
                   Características
@@ -40,7 +40,7 @@ export default function Footer() {
           </div>
           <div>
             <h4 className="font-semibold mb-4">Soporte</h4>
-            <ul className="space-y-2 text-gray-400">
+            <ul className="space-y-2 text-[#D7DDE3]">
               <li>
                 <a href="#" className="hover:text-white transition-colors">
                   Ayuda
@@ -60,7 +60,7 @@ export default function Footer() {
           </div>
           <div>
             <h4 className="font-semibold mb-4">Legal</h4>
-            <ul className="space-y-2 text-gray-400">
+            <ul className="space-y-2 text-[#D7DDE3]">
               <li>
                 <a href="#" className="hover:text-white transition-colors">
                   Privacidad
@@ -74,7 +74,7 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <div className="border-t border-[#D7DDE3] mt-8 pt-8 text-center text-[#D7DDE3]">
           <p>&copy; 2025 AdmonY. Todos los derechos reservados.</p>
         </div>
       </div>

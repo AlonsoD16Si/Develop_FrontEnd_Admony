@@ -51,11 +51,11 @@ export default function Benefits() {
     <section
       id="beneficios"
       ref={sectionRef}
-      className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#F8F8F8] to-white opacity-0"
+      className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#F7F9FA] to-white opacity-0"
     >
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#000000] mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-[#1E1E1E] mb-4">
             Beneficios para Ti
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -68,16 +68,16 @@ export default function Benefits() {
           {benefits.map((benefit, index) => (
             <div
               key={index}
-              className="p-8 bg-white rounded-xl border-2 border-[#007A60]/20 hover:border-[#007A60] transition-all duration-300 transform hover:scale-105 shadow-md"
+              className="p-8 bg-white rounded-xl border-2 border-[#2FBF71]/20 hover:border-[#2FBF71] transition-all duration-300 transform hover:scale-105 shadow-md"
             >
               <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-[#007A60] rounded-lg flex items-center justify-center">
+                <div className="flex-shrink-0 w-12 h-12 bg-[#2FBF71] rounded-lg flex items-center justify-center">
                   <span className="text-white text-xl font-bold">
                     {index + 1}
                   </span>
                 </div>
                 <div>
-                  <h3 className="text-2xl font-semibold text-[#000000] mb-3">
+                  <h3 className="text-2xl font-semibold text-[#1E1E1E] mb-3">
                     {benefit.title}
                   </h3>
                   <p className="text-gray-600 leading-relaxed">

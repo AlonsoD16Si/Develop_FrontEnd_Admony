@@ -1,0 +1,257 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+
+export default function RegisterPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const router = useRouter();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const validateForm = () => {
+    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+      setError("Por favor, completa todos los campos");
+      return false;
+    }
+
+    if (formData.password.length < 8) {
+      setError("La contraseña debe tener al menos 8 caracteres");
+      return false;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Las contraseñas no coinciden");
+      return false;
+    }
+
+    if (!acceptedTerms) {
+      setError("Debes aceptar los términos y condiciones");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+
+    // Simulación de registro (en producción esto sería una llamada a API)
+    setTimeout(() => {
+      // Guardar datos del usuario
+      localStorage.setItem("authToken", "mock-token-" + Date.now());
+      localStorage.setItem("userEmail", formData.email);
+      localStorage.setItem("userName", formData.name);
+      router.push("/private");
+      setLoading(false);
+    }, 1500);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[#0A0E27] via-[#1A1F3A] to-[#0A0E27] flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md">
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <div className="inline-block mb-4">
+            <Link href="/">
+              <Image
+                src="/logo_bg_black.png"
+                alt="AdmonY Logo"
+                width={190}
+                height={55}
+                className="h-16 w-auto brightness-0 invert"
+                priority
+              />
+            </Link>
+          </div>
+          <h1 className="text-3xl font-bold text-white mb-2">
+            Crear Cuenta
+          </h1>
+          <p className="text-gray-400">
+            Únete a AdmonY y toma control de tus finanzas
+          </p>
+        </div>
+
+        {/* Formulario */}
+        <div className="bg-[#1A1F3A]/80 backdrop-blur-sm border border-[#2A2F4A] rounded-2xl p-8 shadow-2xl">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
+
+            <div>
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-300 mb-2"
+              >
+                Nombre Completo
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-[#0A0E27] border border-[#2A2F4A] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#F0B90B] focus:border-transparent transition-all"
+                placeholder="Juan Pérez"
+                required
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-300 mb-2"
+              >
+                Correo Electrónico
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-[#0A0E27] border border-[#2A2F4A] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#F0B90B] focus:border-transparent transition-all"
+                placeholder="tu@email.com"
+                required
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-300 mb-2"
+              >
+                Contraseña
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-[#0A0E27] border border-[#2A2F4A] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#F0B90B] focus:border-transparent transition-all"
+                placeholder="Mínimo 8 caracteres"
+                required
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                Mínimo 8 caracteres
+              </p>
+            </div>
+
+            <div>
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-gray-300 mb-2"
+              >
+                Confirmar Contraseña
+              </label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-[#0A0E27] border border-[#2A2F4A] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#F0B90B] focus:border-transparent transition-all"
+                placeholder="Confirma tu contraseña"
+                required
+              />
+            </div>
+
+            <div className="flex items-start">
+              <input
+                id="terms"
+                type="checkbox"
+                checked={acceptedTerms}
+                onChange={(e) => setAcceptedTerms(e.target.checked)}
+                className="mt-1 w-4 h-4 rounded border-[#2A2F4A] bg-[#0A0E27] text-[#F0B90B] focus:ring-[#F0B90B] focus:ring-offset-0"
+                required
+              />
+              <label htmlFor="terms" className="ml-2 text-sm text-gray-400">
+                Acepto los{" "}
+                <a
+                  href="#"
+                  className="text-[#F0B90B] hover:text-[#F5C842] transition-colors underline"
+                >
+                  términos y condiciones
+                </a>{" "}
+                y la{" "}
+                <a
+                  href="#"
+                  className="text-[#F0B90B] hover:text-[#F5C842] transition-colors underline"
+                >
+                  política de privacidad
+                </a>
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 bg-gradient-to-r from-[#F0B90B] to-[#F5C842] text-[#0A0E27] font-semibold rounded-lg hover:from-[#F5C842] hover:to-[#F0B90B] transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#F0B90B]/20"
+            >
+              {loading ? "Creando cuenta..." : "Crear Cuenta"}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-gray-400 text-sm">
+              ¿Ya tienes una cuenta?{" "}
+              <Link
+                href="/login"
+                className="text-[#F0B90B] hover:text-[#F5C842] font-medium transition-colors"
+              >
+                Inicia sesión aquí
+              </Link>
+            </p>
+          </div>
+        </div>
+
+        {/* Seguridad */}
+        <div className="mt-6 text-center">
+          <div className="inline-flex items-center space-x-2 text-gray-500 text-xs">
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
+            </svg>
+            <span>Conexión segura SSL • Datos encriptados</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+

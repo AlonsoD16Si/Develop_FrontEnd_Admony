@@ -29,12 +29,14 @@ export default function Solution() {
     <section
       id="solucion"
       ref={sectionRef}
-      className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#2B40B5]/5 to-[#007A60]/5 opacity-0"
+      className="py-24 px-4 sm:px-6 lg:px-8 bg-[#f6f6f6]
+      border-t-1 border-b-1 border-[#D7DDE3] opacity-0
+ "
     >
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="text-4xl md:text-5xl font-bold text-[#000000] mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-[#1E1E1E] mb-6">
               La Solución: AdmonY
             </h2>
             <p className="text-lg text-gray-700 mb-6 leading-relaxed">
@@ -50,7 +52,7 @@ export default function Solution() {
             </p>
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0 w-6 h-6 bg-[#007A60] rounded-full flex items-center justify-center mt-1">
+                <div className="flex-shrink-0 w-6 h-6 bg-[#2FBF71] rounded-full flex items-center justify-center mt-1">
                   <span className="text-white text-sm">✓</span>
                 </div>
                 <p className="text-gray-700">
@@ -58,7 +60,7 @@ export default function Solution() {
                 </p>
               </div>
               <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0 w-6 h-6 bg-[#007A60] rounded-full flex items-center justify-center mt-1">
+                <div className="flex-shrink-0 w-6 h-6 bg-[#2FBF71] rounded-full flex items-center justify-center mt-1">
                   <span className="text-white text-sm">✓</span>
                 </div>
                 <p className="text-gray-700">
@@ -66,7 +68,7 @@ export default function Solution() {
                 </p>
               </div>
               <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0 w-6 h-6 bg-[#007A60] rounded-full flex items-center justify-center mt-1">
+                <div className="flex-shrink-0 w-6 h-6 bg-[#2FBF71] rounded-full flex items-center justify-center mt-1">
                   <span className="text-white text-sm">✓</span>
                 </div>
                 <p className="text-gray-700">
@@ -77,7 +79,7 @@ export default function Solution() {
             </div>
           </div>
           <div className="relative">
-  <div className="relative w-full h-96 from-[#2B40B5]/20 to-[#007A60]/20 rounded-2xl overflow-hidden ">
+  <div className="relative w-full h-96 from-[#0A3A63]/20 to-[#2FBF71]/20 rounded-2xl overflow-hidden ">
     <Image
       src="/banner_landing_2.png"
       alt="AdmonY Banner"
