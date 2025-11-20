@@ -27,7 +27,32 @@ export default function LoginPage() {
         }),
       });
 
-      const data = await response.json();
+      // Verificar si la respuesta tiene contenido antes de parsear JSON
+      const contentType = response.headers.get("content-type");
+      const text = await response.text();
+
+      let data;
+      if (text && contentType && contentType.includes("application/json")) {
+        try {
+          data = JSON.parse(text);
+        } catch (parseError) {
+          console.error("Error al parsear JSON:", parseError);
+          setError(
+            `Error del servidor (${response.status}): Respuesta inválida del servidor.`
+          );
+          setLoading(false);
+          return;
+        }
+      } else {
+        // Si no es JSON o está vacío, manejar el error
+        setError(
+          `Error del servidor (${response.status}): ${
+            response.statusText || "Respuesta inválida del servidor"
+          }`
+        );
+        setLoading(false);
+        return;
+      }
 
       if (!response.ok) {
         // Manejar errores de validación o credenciales inválidas
@@ -63,9 +88,19 @@ export default function LoginPage() {
       }
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
-      setError(
-        "Error de conexión. Por favor, verifica que el servidor esté funcionando."
-      );
+
+      // Mensajes de error más específicos
+      if (error instanceof TypeError && error.message === "Failed to fetch") {
+        setError(
+          "No se pudo conectar con el servidor. Verifica que el servidor esté corriendo y que la URL sea correcta."
+        );
+      } else if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError(
+          "Error de conexión. Por favor, verifica que el servidor esté funcionando."
+        );
+      }
       setLoading(false);
     }
   };

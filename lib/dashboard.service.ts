@@ -193,14 +193,37 @@ export async function getFinancialSummary(
     method: "GET",
   });
 
+  const contentType = response.headers.get("content-type");
+  const text = await response.text();
+
   if (!response.ok) {
-    const error = await response
-      .json()
-      .catch(() => ({ message: "Error desconocido" }));
+    let error;
+    if (text && contentType && contentType.includes("application/json")) {
+      try {
+        error = JSON.parse(text);
+      } catch {
+        error = { message: "Error desconocido" };
+      }
+    } else {
+      error = {
+        message: `Error del servidor (${response.status}): ${
+          response.statusText || "Error desconocido"
+        }`,
+      };
+    }
     throw new Error(error.message || "Error al obtener el resumen financiero");
   }
 
-  const result = await response.json();
+  if (!text || !contentType || !contentType.includes("application/json")) {
+    throw new Error("Respuesta inválida del servidor");
+  }
+
+  let result;
+  try {
+    result = JSON.parse(text);
+  } catch {
+    throw new Error("Error al parsear la respuesta del servidor");
+  }
   // La API devuelve { success: true, data: {...} }
   if (result.success && result.data) {
     return result.data;
@@ -219,14 +242,37 @@ export async function getTrends(userId: number): Promise<TrendsResponse> {
     method: "GET",
   });
 
+  const contentType = response.headers.get("content-type");
+  const text = await response.text();
+
   if (!response.ok) {
-    const error = await response
-      .json()
-      .catch(() => ({ message: "Error desconocido" }));
+    let error;
+    if (text && contentType && contentType.includes("application/json")) {
+      try {
+        error = JSON.parse(text);
+      } catch {
+        error = { message: "Error desconocido" };
+      }
+    } else {
+      error = {
+        message: `Error del servidor (${response.status}): ${
+          response.statusText || "Error desconocido"
+        }`,
+      };
+    }
     throw new Error(error.message || "Error al obtener las tendencias");
   }
 
-  const result = await response.json();
+  if (!text || !contentType || !contentType.includes("application/json")) {
+    throw new Error("Respuesta inválida del servidor");
+  }
+
+  let result;
+  try {
+    result = JSON.parse(text);
+  } catch {
+    throw new Error("Error al parsear la respuesta del servidor");
+  }
   // La API devuelve { success: true, data: {...} }
   if (result.success && result.data) {
     return result.data;
@@ -254,16 +300,39 @@ export async function getChartData(
     }
   );
 
+  const contentType = response.headers.get("content-type");
+  const text = await response.text();
+
   if (!response.ok) {
-    const error = await response
-      .json()
-      .catch(() => ({ message: "Error desconocido" }));
+    let error;
+    if (text && contentType && contentType.includes("application/json")) {
+      try {
+        error = JSON.parse(text);
+      } catch {
+        error = { message: "Error desconocido" };
+      }
+    } else {
+      error = {
+        message: `Error del servidor (${response.status}): ${
+          response.statusText || "Error desconocido"
+        }`,
+      };
+    }
     throw new Error(
       error.message || "Error al obtener los datos de la gráfica"
     );
   }
 
-  const result = await response.json();
+  if (!text || !contentType || !contentType.includes("application/json")) {
+    throw new Error("Respuesta inválida del servidor");
+  }
+
+  let result;
+  try {
+    result = JSON.parse(text);
+  } catch {
+    throw new Error("Error al parsear la respuesta del servidor");
+  }
   // La API devuelve { success: true, data: {...} }
   if (result.success && result.data) {
     return result.data;
@@ -282,14 +351,37 @@ export async function getAlerts(userId: number): Promise<Alerta[]> {
     method: "GET",
   });
 
+  const contentType = response.headers.get("content-type");
+  const text = await response.text();
+
   if (!response.ok) {
-    const error = await response
-      .json()
-      .catch(() => ({ message: "Error desconocido" }));
+    let error;
+    if (text && contentType && contentType.includes("application/json")) {
+      try {
+        error = JSON.parse(text);
+      } catch {
+        error = { message: "Error desconocido" };
+      }
+    } else {
+      error = {
+        message: `Error del servidor (${response.status}): ${
+          response.statusText || "Error desconocido"
+        }`,
+      };
+    }
     throw new Error(error.message || "Error al obtener las alertas");
   }
 
-  const result = await response.json();
+  if (!text || !contentType || !contentType.includes("application/json")) {
+    throw new Error("Respuesta inválida del servidor");
+  }
+
+  let result;
+  try {
+    result = JSON.parse(text);
+  } catch {
+    throw new Error("Error al parsear la respuesta del servidor");
+  }
   // La API devuelve { success: true, data: {...} }
   // Para alertas, puede ser un array directo o estar en data
   if (result.success && result.data) {
@@ -312,16 +404,39 @@ export async function getDashboardData(
     method: "GET",
   });
 
+  const contentType = response.headers.get("content-type");
+  const text = await response.text();
+
   if (!response.ok) {
-    const error = await response
-      .json()
-      .catch(() => ({ message: "Error desconocido" }));
+    let error;
+    if (text && contentType && contentType.includes("application/json")) {
+      try {
+        error = JSON.parse(text);
+      } catch {
+        error = { message: "Error desconocido" };
+      }
+    } else {
+      error = {
+        message: `Error del servidor (${response.status}): ${
+          response.statusText || "Error desconocido"
+        }`,
+      };
+    }
     throw new Error(
       error.message || "Error al obtener los datos del dashboard"
     );
   }
 
-  const result = await response.json();
+  if (!text || !contentType || !contentType.includes("application/json")) {
+    throw new Error("Respuesta inválida del servidor");
+  }
+
+  let result;
+  try {
+    result = JSON.parse(text);
+  } catch {
+    throw new Error("Error al parsear la respuesta del servidor");
+  }
   // La API devuelve { success: true, data: {...} }
   if (result.success && result.data) {
     return result.data;
