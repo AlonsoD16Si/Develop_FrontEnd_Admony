@@ -4,10 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { apiRequest } from "@/lib/api";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
-    name: "",
+    nombre: "",
+    apellido: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -25,7 +27,13 @@ export default function RegisterPage() {
   };
 
   const validateForm = () => {
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+    if (
+      !formData.nombre ||
+      !formData.apellido ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
       setError("Por favor, completa todos los campos");
       return false;
     }
@@ -58,15 +66,59 @@ export default function RegisterPage() {
 
     setLoading(true);
 
-    // Simulación de registro (en producción esto sería una llamada a API)
-    setTimeout(() => {
-      // Guardar datos del usuario
-      localStorage.setItem("authToken", "mock-token-" + Date.now());
+    try {
+      const response = await apiRequest("/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify({
+          correo: formData.email,
+          contrasenia: formData.password,
+          nombre: `${formData.nombre} ${formData.apellido}`.trim(), 
+        }),
+      });
+
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error(
+          `Error del servidor (${response.status}): ${response.statusText}`
+        );
+      }
+
+      if (!response.ok || !data.success) {
+        setError(
+          data.message ||
+            "Error al registrar usuario. Por favor, intenta nuevamente."
+        );
+        setLoading(false);
+        return;
+      }
+
+      // Guardar token y datos del usuario
+      localStorage.setItem("authToken", data.data.token);
       localStorage.setItem("userEmail", formData.email);
-      localStorage.setItem("userName", formData.name);
+      localStorage.setItem(
+        "userName",
+        `${formData.nombre} ${formData.apellido}`
+      );
+
+      // Redirigir al panel privado
       router.push("/private");
+    } catch (error) {
+      console.error("Error en el registro:", error);
+
+      // Mensajes de error más específicos
+      if (error instanceof TypeError && error.message === "Failed to fetch") {
+        setError(
+          "No se pudo conectar con el servidor. Verifica que el servidor esté corriendo y que la URL sea correcta."
+        );
+      } else if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("Error de conexión. Por favor, intenta nuevamente.");
+      }
       setLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -86,9 +138,7 @@ export default function RegisterPage() {
               />
             </Link>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">
-            Crear Cuenta
-          </h1>
+          <h1 className="text-3xl font-bold text-white mb-2">Crear Cuenta</h1>
           <p className="text-gray-400">
             Únete a AdmonY y toma control de tus finanzas
           </p>
@@ -105,19 +155,38 @@ export default function RegisterPage() {
 
             <div>
               <label
-                htmlFor="name"
+                htmlFor="nombre"
                 className="block text-sm font-medium text-gray-300 mb-2"
               >
-                Nombre Completo
+                Nombre
               </label>
               <input
-                id="name"
-                name="name"
+                id="nombre"
+                name="nombre"
                 type="text"
-                value={formData.name}
+                value={formData.nombre}
                 onChange={handleChange}
                 className="w-full px-4 py-3 bg-[#0A0E27] border border-[#2A2F4A] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#F0B90B] focus:border-transparent transition-all"
-                placeholder="Juan Pérez"
+                placeholder="Juan"
+                required
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="apellido"
+                className="block text-sm font-medium text-gray-300 mb-2"
+              >
+                Apellido
+              </label>
+              <input
+                id="apellido"
+                name="apellido"
+                type="text"
+                value={formData.apellido}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-[#0A0E27] border border-[#2A2F4A] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#F0B90B] focus:border-transparent transition-all"
+                placeholder="Pérez"
                 required
               />
             </div>
@@ -158,9 +227,7 @@ export default function RegisterPage() {
                 placeholder="Mínimo 8 caracteres"
                 required
               />
-              <p className="mt-1 text-xs text-gray-500">
-                Mínimo 8 caracteres
-              </p>
+              <p className="mt-1 text-xs text-gray-500">Mínimo 8 caracteres</p>
             </div>
 
             <div>
@@ -254,4 +321,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { apiRequest } from "@/lib/api";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -17,18 +18,56 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
 
-    // Simulación de autenticación (en producción esto sería una llamada a API)
-    setTimeout(() => {
-      if (email && password) {
-        // Guardar token de sesión
-        localStorage.setItem("authToken", "mock-token-" + Date.now());
-        localStorage.setItem("userEmail", email);
+    try {
+      const response = await apiRequest("/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify({
+          correo: email,
+          contrasenia: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Manejar errores de validación o credenciales inválidas
+        if (data.errors && Array.isArray(data.errors)) {
+          setError(
+            data.errors
+              .map((err: { message: string }) => err.message)
+              .join(", ")
+          );
+        } else {
+          setError(
+            data.message ||
+              "Error al iniciar sesión. Por favor, verifica tus credenciales."
+          );
+        }
+        setLoading(false);
+        return;
+      }
+
+      if (data.success && data.data) {
+        // Guardar token y datos del usuario
+        localStorage.setItem("authToken", data.data.token);
+        localStorage.setItem("userEmail", data.data.user.Correo);
+        localStorage.setItem("userName", data.data.user.Nombre);
+        localStorage.setItem("userId", data.data.user.Id_Usuario.toString());
+        localStorage.setItem("userRole", data.data.user.Rol);
+
+        // Redirigir al dashboard o página privada
         router.push("/private");
       } else {
-        setError("Por favor, completa todos los campos");
+        setError("Error inesperado al iniciar sesión");
+        setLoading(false);
       }
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
+      setError(
+        "Error de conexión. Por favor, verifica que el servidor esté funcionando."
+      );
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -78,6 +117,7 @@ export default function LoginPage() {
                 className="w-full px-4 py-3 bg-[#0A0E27] border border-[#2A2F4A] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#F0B90B] focus:border-transparent transition-all"
                 placeholder="tu@email.com"
                 required
+                disabled={loading}
               />
             </div>
 
@@ -96,6 +136,7 @@ export default function LoginPage() {
                 className="w-full px-4 py-3 bg-[#0A0E27] border border-[#2A2F4A] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#F0B90B] focus:border-transparent transition-all"
                 placeholder="••••••••"
                 required
+                disabled={loading}
               />
             </div>
 
@@ -104,6 +145,7 @@ export default function LoginPage() {
                 <input
                   type="checkbox"
                   className="w-4 h-4 rounded border-[#2A2F4A] bg-[#0A0E27] text-[#F0B90B] focus:ring-[#F0B90B] focus:ring-offset-0"
+                  disabled={loading}
                 />
                 <span className="ml-2 text-gray-400">Recordarme</span>
               </label>
