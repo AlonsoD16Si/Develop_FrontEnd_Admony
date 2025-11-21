@@ -10,6 +10,12 @@ import {
 import SummaryCards from "./components/SummaryCards";
 import Alerts from "./components/Alerts";
 import RecentActivity from "./components/RecentActivity";
+import FinancialBreakdown from "./components/FinancialBreakdown";
+import SavingsGoals from "./components/SavingsGoals";
+import ChartsOverview from "./components/ChartsOverview";
+import OrganizationOverview from "./components/OrganizationOverview";
+import TrendCard from "./components/TrendCard";
+import UserProfileCard from "./components/UserProfileCard";
 
 export default function PrivateDashboard() {
   const [userEmail, setUserEmail] = useState("");
@@ -20,6 +26,13 @@ export default function PrivateDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const sectionLinks = [
+    { id: "resumen", label: "Resumen" },
+    { id: "tendencias", label: "Tendencias" },
+    { id: "actividad", label: "Actividad" },
+    { id: "ahorros", label: "Ahorros" },
+    { id: "organizacion", label: "Organización" },
+  ];
 
   useEffect(() => {
     const email = localStorage.getItem("userEmail");
@@ -116,6 +129,20 @@ export default function PrivateDashboard() {
           </p>
         </div>
 
+        <div className="mb-10">
+          <div className="flex flex-wrap gap-3">
+            {sectionLinks.map((link) => (
+              <a
+                key={link.id}
+                href={`#${link.id}`}
+                className="px-4 py-2 rounded-full text-sm font-medium border border-[#2A2F4A] text-gray-300 hover:bg-[#2A2F4A] transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </div>
+
         {/* Error Message */}
         {error && (
           <div className="mb-6 bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg">
@@ -139,37 +166,106 @@ export default function PrivateDashboard() {
         )}
 
         {/* Summary Cards */}
-        {dashboardData && dashboardData.resumen ? (
-          <SummaryCards
-            resumen={{
-              totalIngresos: dashboardData.resumen.totalIngresos || 0,
-              totalExtras: dashboardData.resumen.totalExtras || 0,
-              totalGastos: dashboardData.resumen.totalGastos || 0,
-              saldoActual: dashboardData.resumen.saldoActual || 0,
-              ahorroTotal: dashboardData.resumen.ahorroTotal || 0,
-              porcentajeAhorro: dashboardData.resumen.porcentajeAhorro || 0,
-              balanceNeto: dashboardData.resumen.balanceNeto || 0,
-            }}
-            tendencias={dashboardData.tendencias}
-            loading={loading}
-          />
-        ) : (
-          <SummaryCards
-            resumen={{
-              totalIngresos: 0,
-              totalExtras: 0,
-              totalGastos: 0,
-              saldoActual: 0,
-              ahorroTotal: 0,
-              porcentajeAhorro: 0,
-              balanceNeto: 0,
-            }}
-            loading={loading}
-          />
-        )}
+        <section id="resumen">
+          {dashboardData && dashboardData.resumen ? (
+            <SummaryCards
+              resumen={{
+                totalIngresos: dashboardData.resumen.totalIngresos || 0,
+                totalExtras: dashboardData.resumen.totalExtras || 0,
+                totalGastos: dashboardData.resumen.totalGastos || 0,
+                saldoActual: dashboardData.resumen.saldoActual || 0,
+                ahorroTotal: dashboardData.resumen.ahorroTotal || 0,
+                porcentajeAhorro: dashboardData.resumen.porcentajeAhorro || 0,
+                balanceNeto: dashboardData.resumen.balanceNeto || 0,
+              }}
+              tendencias={dashboardData.tendencias}
+              loading={loading}
+            />
+          ) : (
+            <SummaryCards
+              resumen={{
+                totalIngresos: 0,
+                totalExtras: 0,
+                totalGastos: 0,
+                saldoActual: 0,
+                ahorroTotal: 0,
+                porcentajeAhorro: 0,
+                balanceNeto: 0,
+              }}
+              loading={loading}
+            />
+          )}
+        </section>
+
+        {/* Tendencias, Perfil y Accesos */}
+        <section id="tendencias" className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8 scroll-mt-24">
+          <div className="lg:col-span-2">
+            <TrendCard tendencias={dashboardData?.tendencias} loading={loading} />
+          </div>
+          <UserProfileCard usuario={dashboardData?.usuario} loading={loading} />
+          <div className="bg-[#1A1F3A]/80 backdrop-blur-sm border border-[#2A2F4A] rounded-xl p-6">
+            <h2 className="text-xl font-semibold text-white mb-4">Accesos Rápidos</h2>
+            <p className="text-sm text-gray-400 mb-4">
+              Atajos para las acciones más frecuentes.
+            </p>
+            <div className="space-y-3">
+              <button className="w-full px-4 py-3 bg-[#2A2F4A] hover:bg-[#3A3F5A] text-white rounded-lg transition-colors text-left flex items-center space-x-3">
+                <svg
+                  className="w-5 h-5 text-[#F0B90B]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                <span>Nueva Transacción</span>
+              </button>
+              <button className="w-full px-4 py-3 bg-[#2A2F4A] hover:bg-[#3A3F5A] text-white rounded-lg transition-colors text-left flex items-center space-x-3">
+                <svg
+                  className="w-5 h-5 text-[#F0B90B]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  />
+                </svg>
+                <span>Ver Reportes</span>
+              </button>
+              <button className="w-full px-4 py-3 bg-[#2A2F4A] hover:bg-[#3A3F5A] text-white rounded-lg transition-colors text-left flex items-center space-x-3">
+                <svg
+                  className="w-5 h-5 text-[#F0B90B]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>Configurar Presupuesto</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Detalle financiero */}
+        <FinancialBreakdown detalle={dashboardData?.detalle} loading={loading} />
 
         {/* Main Content Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <section id="actividad" className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 scroll-mt-24">
           {/* Actividad Reciente */}
           <div className="lg:col-span-2">
             {dashboardData && dashboardData.detalle ? (
@@ -201,73 +297,33 @@ export default function PrivateDashboard() {
             )}
           </div>
 
-          {/* Alertas y Accesos Rápidos */}
-          <div className="space-y-6">
-            {/* Alertas */}
+          {/* Alertas */}
+          <div>
             {dashboardData && dashboardData.alertas ? (
               <Alerts alertas={dashboardData.alertas} loading={loading} />
             ) : (
               <Alerts alertas={[]} loading={loading} />
             )}
-
-            {/* Accesos Rápidos */}
-            <div className="bg-[#1A1F3A]/80 backdrop-blur-sm border border-[#2A2F4A] rounded-xl p-6">
-              <h2 className="text-xl font-semibold text-white mb-4">
-                Accesos Rápidos
-              </h2>
-              <div className="space-y-3">
-                <button className="w-full px-4 py-3 bg-[#2A2F4A] hover:bg-[#3A3F5A] text-white rounded-lg transition-colors text-left flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-[#F0B90B]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                  <span>Nueva Transacción</span>
-                </button>
-                <button className="w-full px-4 py-3 bg-[#2A2F4A] hover:bg-[#3A3F5A] text-white rounded-lg transition-colors text-left flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-[#F0B90B]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                    />
-                  </svg>
-                  <span>Ver Reportes</span>
-                </button>
-                <button className="w-full px-4 py-3 bg-[#2A2F4A] hover:bg-[#3A3F5A] text-white rounded-lg transition-colors text-left flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-[#F0B90B]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  <span>Configurar Presupuesto</span>
-                </button>
-              </div>
-            </div>
           </div>
-        </div>
+        </section>
+
+        <section
+          id="ahorros"
+          className="grid grid-cols-1 xl:grid-cols-2 gap-6 scroll-mt-24"
+        >
+          <SavingsGoals
+            objetivos={dashboardData?.detalle?.ahorros?.objetivos}
+            loading={loading}
+          />
+          <ChartsOverview graficas={dashboardData?.graficas} loading={loading} />
+        </section>
+
+        <section id="organizacion" className="mt-8 scroll-mt-24">
+          <OrganizationOverview
+            organizacion={dashboardData?.organizacion}
+            loading={loading}
+          />
+        </section>
       </main>
     </div>
   );
